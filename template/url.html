@@ -1,0 +1,95 @@
+﻿<html>
+    <head>
+    	
+ <link href="/static/css/biaoqian.css"" type=text/css rel=stylesheet>
+     	
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+ <!-- 适应手机开始 -->  
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+ <!-- 适应手机结束-->  
+<title>{{title}}</title>
+<script type="text/javascript">
+function del_url(id)
+{
+var r=confirm("确定执行操作吗？");
+if (r==true)
+  {
+location.replace("del_show.php?id="+id); 
+  }
+}
+</script>
+
+<script type="text/javascript">
+function show_box(mid){
+if(document.getElementById(mid).style.display=="none"){document.getElementById(mid).style.display="block";
+}else {
+document.getElementById(mid).style.display="none";}
+  }
+</script>
+ </head>
+    <body>
+    	<!-- position:fixed 出于右上角不动-->
+ <div style="position:absolute;border:2px solid red;float:right;z-index:1;right:0;top:0;background-color:LightGrey">
+     <center>  <h3><a onclick="javascript:void(show_box('paixu'))" target="_self" >排序</a></h2>
+      <div id="paixu" style="display:none;">
+              <h3 class="t"><a href = "./index.php?paixu=4"  target="_self" class="test">按热度排序 </a></h2>
+              <h3 class="t"><a href = "./index.php?paixu=3"  target="_self" class="test">按最近访问时间排序 </a></h2>
+              <h3 class="t"><a href = "../url"  target="_self" class="test">默认排序 </a></h2> </center>
+            </div>
+          </div>
+   <div style="position:absolute;border:2px solid red;float:right;z-index:1;left:0;top:0;background-color:LightGrey">
+            <center>  <h3><a onclick="javascript:void(show_box('fenlei'))" target="_self" >分类</a></h2>
+            <div id="fenlei" style="display:none;">
+           <h3 class="t"><a href = "./index.php?type=99"  target="_self" class="test">全部分类</a></h2>
+            {%for item in item_list %}
+               <h3 class="t"><a href = "./index.php?type=<?php echo $rzt[type] ?>"  target="_self" class="test">{{item.type_name}}</a></h2>
+              {%endfor%} 
+              </center>
+            </div>
+          </div>
+          
+     
+      <center>  <h1><a onclick="javascript:void(show_box('box'))" target="_self" >收藏夹</a></h1> </center>
+     <!-- 标签开始-->    
+   <div id="box" class="method" style="display:none;"> 
+   <!--javascript:void((function(){var%20temp=document.createElement('form');var%20aa=window.location.href;PARAMS={f_url:aa,f_id:'1'};temp.action='http://pkhtml.sinaapp.com/url/js.php';temp.method='post';temp.style.display='none';for(var%20x%20in%20PARAMS){var%20opt=document.createElement('textarea');opt.name=x;opt.value=PARAMS[x];temp.appendChild(opt);}document.body.appendChild(temp);temp.submit();return%20temp;}()));-->
+	 <b>chrome 浏 览 器</b><br /><a onclick="alert('请将此链接拖拽到书签栏'); return false" href="javascript:void((function(){var%20aa=window.location.href;aa='http://pkhtml.sinaapp.com/url/js.php?f_url='+aa;window.open(aa,'','height=1,width=1,toolbar=0,menubar=0,scrollbars=0,resizable=0,location=0,status=0');})());" id=clipper-bd>收藏到sae</a> 
+	 <br><b>IE 浏 览 器</b><br /><a onclick="alert('请将此链接拖拽到书签栏'); return false" href="javascript:void((function(){var%20aa=window.location.href;aa='http://pkhtml.sinaapp.com/url/js.php?f_url='+aa;window.showModalDialog(aa,'','dialogWidth=1px;dialogHeight=1px;help=0;status=0;scroll=0');})());" id=clipper-bd>收藏到sae</a> 
+	 
+	 <br>
+	 <a href = "./add_edit.php"  target="_self" >编辑分类 </a>
+	 </div> 
+	 
+	 <!-- 标签结束-->   
+	 
+  <form name="contactform" method="post" action="/url/add/" name="message">
+             <div class="field">
+            <label >分类</label>
+  <select name="type" >
+                    	      {%for item in item_list %}
+    <option value="{{item.urltype}}">{{item.type_name}}</option>
+              {%endfor%} 
+   </select>
+   <br>
+          <label for="post_title">url：</label>
+          <textarea  rows="3" cols="50" name="f_url" id="post_info"></textarea>
+          </div>
+       <input type="submit" name="Submit"  class="button" value="提交" />
+      </form>
+
+     {%for item in url_list%}
+     <h3 class="t"><a href = "{{item.url}}"  target="_blank" class="test"> 
+    {{item.title}}
+        		</a></h3>
+        <!--	<h5 style="text-align:right" class="t"><a onclick = "javascript:del_url(<?php echo $rzt[id];?>)" href="javascript:void(0)" target="_self" class="test"> -->
+     <h5 style="text-align:right" class="t"><a href="/url/del/?id={{item.id}}" target="_self" class="test"> 
+      删除</a></h5>
+      <hr />
+<!--  <br /> -->
+ {%endfor%} 
+  
+</body>
+</html>

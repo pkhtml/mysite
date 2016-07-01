@@ -1,0 +1,46 @@
+﻿/* ------- bd ------- */
+/*
+.web-clipper{background:#FAFAFA;}
+.web-clipper h2,.web-clipper h3,.web-clipper h4{ display:inline-block; font-weight:normal;font-family:微软雅黑;}
+.web-clipper h2{font-size:26px;}
+.web-clipper h3{font-size:18px;}
+.web-clipper h4{margin:10px 0 ; background:url("images/e2fa498a.web-clipper_09.jpg") no-repeat left center; height:21px; padding-left:10px;font-size:14px; line-height:21px;font-weight:bolder;}
+#bd{background-color:#fafafa;padding-bottom: 0px;}
+.web-clipper #bd{padding-top:0px;}
+#bd-banner{background-color:#ffffff;height:132px;border:1px solid #f1f1f1;}
+#bd-main,.banner{ margin: 0 auto; width:961px;}
+.banner{padding-top:45px;}
+.banner span{font:14px 宋体;margin-left:10px;color:#666666;}
+#bd-main{background-color:#fafafa;}
+#content,#sidebar{float:left;_display:inline;}
+#content{width:720px; border-right:1px solid #f1f1f1;}
+*/
+a:link {text-decoration: none;color: #000;}
+a:visited {text-decoration: none;color: #CCC;}
+a:hover {text-decoration: underline;color: #090}
+a:active{text-decoration:underline; color:#F00}
+/* a:link {color: #FF0000}		未访问的链接 */
+/*a:visited {color: #00FF00}	 已访问的链接 */
+/*a:hover {color: #FF00FF}	 鼠标移动到链接上 */
+/*a:active {color: #0000FF}	 选定的链接 */
+a.test:link {text-decoration: none;color: #4169E1;}
+a.test:visited {text-decoration: none;color: #4169E1;}
+a.test:hover {text-decoration: underline;color: #4682B4}
+a.test:active{text-decoration:underline; color:#4169E1}
+#clipper-bd{display:inline-block;height:67px;font-size:0;width:261px;background:url("../images/biaoqian.png");background-position: 0px -132px;line-height:45px;}
+/*
+#vedio{width:621px;height:350px;background:url("images/f4785556.videobg.jpg") no-repeat;text-align:center;overflow:hidden;}
+#player{display:none;}
+#playbtn{display:block;background:url("images/fdada73f.play-btn.png") no-repeat; width:85px;height:85px;margin:132px auto;cursor:pointer;opacity: 0.7;}
+#vedio a:hover{opacity: 1;}
+*/
+/* ------- content ------- */
+/*
+.method{height:80px;margin-top:15px;}
+.extension{background:url(images/0f7ef2ff.web-clipper-chrome-bg.png) no-repeat right bottom;border-bottom:1px solid #dedede;}
+.method .down{display:inline-block;height:55px;font-size:0;width:250px;background:url("images/31706147.web-clipper-chrome-down.png");line-height:55px;}
+.method span{display:inline-block;width:220px;font-size:18px;font-family:宋体;color:#666666;}
+.helpItem { margin:0 0 65px 50px;padding-bottom:30px;}
+.feedback,.question{display:block; width:100px;height:26px; margin-left:30px; margin-top:10px;font:100 22px  微软雅黑; color:#29a7e5;}
+.question{background-position:0 -35px;}
+*/
