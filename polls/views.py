@@ -12,6 +12,9 @@ from bs4 import BeautifulSoup
 import urllib2,urllib
 import time,datetime
 import re
+import hashlib
+from django.utils.encoding import smart_str, smart_unicode
+from xml.etree import ElementTree as etree
 
 
 def shoucang(request):
@@ -65,8 +68,51 @@ def urldel(request):
 	html=t.render(Context({'title':'删除成功','url':'../../url/'}))
 	return HttpResponse(html)
 
+def weixin(request):
+        if request.method=='GET':
+                response=HttpResponse(check(request))
+                return response
+        else:
+                xmlstr= smart_str(request.body)
+                xml = etree.fromstring(xmlstr)
+
+                ToUserName = xml.find('ToUserName').text
+                FromUserName = xml.find('FromUserName').text
+                CreateTime = xml.find('CreateTime').text
+                MsgType = xml.find('MsgType').text
+                Content = xml.find('Content').text
+                MsgId = xml.find('MsgId').text
+                reply_xml = """<xml>
+                <ToUserName><![CDATA[%s]]></ToUserName>
+                <FromUserName><![CDATA[%s]]></FromUserName>
+                <CreateTime>%s</CreateTime>
+                <MsgType><![CDATA[text]]></MsgType>
+                <Content><![CDATA[%s]]></Content>
+                </xml>"""%(FromUserName,ToUserName,CreateTime,Content + "  Hello world, this is test message")
+                return HttpResponse(reply_xml)
 
 
+def check(request):
+	signature = request.GET.get('signature')
+	timestamp = request.GET.get('timestamp')
+	nonce = request.GET.get('nonce')
+	echostr = request.GET.get('echostr')
+	token = 'TKm7trSVOQ9'
+	
+	tmpArr = [token,timestamp,nonce]
+	tmpArr.sort()
+	tmpArr = tmpArr[0]+tmpArr[1]+tmpArr[2]
+	tmpstr = hashlib.sha1(tmpArr).hexdigest()
+
+	if tmpstr == signature:
+                return echostr
+        else:
+                return None
+        
+
+#微信接口地址http://pkrasp.tunnel.qydev.com/weixin/
+# Token TKm7trSVOQ9
+# EncodingAESKey Dr7QeserhEGC88p2xTKm7trSVOQ9eS9lhdPTEVSJFPY
 # ss =type_db(type='1',type_name='证件',user='pkhtml')
 # ss.save()
 #  dd=type_db.objects.all()
