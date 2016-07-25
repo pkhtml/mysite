@@ -8,7 +8,7 @@ from django.http import HttpResponse
 from django.template import Context
 from polls.models import url_db,type_db
 from django.template import loader,Context,RequestContext
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup,SoupStrainer
 import urllib2,urllib
 import time,datetime
 import re
@@ -25,11 +25,28 @@ def shoucang(request):
 	html=t.render(Context({'title':now,'item_list':typeall,'url_list':urlall}))
 	return HttpResponse(html)
 
+def gettitle(url):
+        user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windos NT)'
+        headers = {'User-Agent': user_agent}
+        req = urllib2.Request(url,headers=headers)
+        resp = urllib2.urlopen(req)
+        respHtml = resp.read()
+        only_title = SoupStrainer("title")
+        soup = BeautifulSoup(respHtml,"lxml",parse_only=only_title)
+        title = soup.title.string
+        if title == None:
+                soup=BeautifulSoup(respHtml,"lxml",parse_only=only_title,from_encoding="gbk")
+                title=soup.title.string
+        strinfo = re.compile('[\r\n\t]')
+        title = strinfo.sub('',title)
+        return title
+
+
 def urladd(request):
 	url = request.POST.get('f_url')
-	user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windos NT)'
+###	user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windos NT)'
 	#urllib.request.urlencode(user_agent)
-	headers = {'User-Agent': user_agent}    
+###	headers = {'User-Agent': user_agent}    
 	#req = urllib.request.Request(url, headers=headers)
 	#response = urllib.request.urlopen(req)
 	#print(response)
@@ -38,18 +55,21 @@ def urladd(request):
     #url=request.POST[f_url]
  	#url = request.POST.get('f_url')
 	urltype = request.POST.get('type')
-	req = urllib2.Request(url,headers=headers)
- 	resp = urllib2.urlopen(req)
- 	respHtml = resp.read()
- 	#body = data.decode('utf-8')
+###	req = urllib2.Request(url,headers=headers)
+### 	resp = urllib2.urlopen(req)
+### 	respHtml = resp.read()
+# 	respHtml = respHtml.encode('gbk')
 	#foundLabel = respHtml.findAll("label")
-	soup = BeautifulSoup(respHtml)
-	title = soup.title.string 
-	
-	
+###	only_title = SoupStrainer("title")
+###	soup = BeautifulSoup(respHtml,"lxml",parse_only=only_title)
+###	title = soup.title.string 
+	title = gettitle(url)
+##	title.replace("\r\n","")
+###	strinfo = re.compile('\r\n')
+###	title = strinfo.sub(' ',title)
+#	strinfo = re.compile('\s+')
+#	title = re.sub(strinfo,'',title)
 
-	strinfo = re.compile('\r\n')
-	title = strinfo.sub(' ',title)
 
 	now = time.strftime("%Y%m%d %H:%M:%S",time.localtime())
 	add = url_db(url=url,title=title,add_time=now,urltype=urltype,user="pkhtml",view_count=0)
@@ -82,13 +102,17 @@ def weixin(request):
                 MsgType = xml.find('MsgType').text
                 Content = xml.find('Content').text
                 MsgId = xml.find('MsgId').text
+                title = gettitle(Content)
                 reply_xml = """<xml>
                 <ToUserName><![CDATA[%s]]></ToUserName>
                 <FromUserName><![CDATA[%s]]></FromUserName>
                 <CreateTime>%s</CreateTime>
                 <MsgType><![CDATA[text]]></MsgType>
                 <Content><![CDATA[%s]]></Content>
-                </xml>"""%(FromUserName,ToUserName,CreateTime,Content + "  Hello world, this is test message")
+                </xml>"""%(FromUserName,ToUserName,CreateTime,title + "  Hello world, this is test message")
+                now = time.strftime("%Y%m%d %H:%M:%S",time.localtime())
+                add = url_db(url=Content,title=title,add_time=now,urltype=1,user=FromUserName,view_count=0)
+                add.save()
                 return HttpResponse(reply_xml)
 
 
