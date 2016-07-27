@@ -1,0 +1,46 @@
+
+### -*- coding: utf-8 -*-
+
+from django.shortcuts import render
+from django.template.loader import get_template
+from django.http import HttpResponse
+from django.template import Context
+#from polls.models import url_db,type_db
+from django.template import loader,Context,RequestContext
+import hashlib
+from django.utils.encoding import smart_str, smart_unicode
+from xml.etree import ElementTree as etree
+import time,datetime
+from bs4 import BeautifulSoup,SoupStrainer
+import urllib2,urllib
+import re
+
+
+def gethtml(url='http://cl.lxrfg.com/thread0806.php?fid=7'):
+        user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windos NT)'
+        headers = {'User-Agent': user_agent}
+        req = urllib2.Request(url,headers=headers)
+        resp = urllib2.urlopen(req)
+        respHtml = resp.read()
+        return respHtml
+
+def getsoup_gbk(respHtml,htmlcharset = "gbk"):
+        only_title = SoupStrainer("title")
+        soup = BeautifulSoup(respHtml,'lxml',parse_only=only_title,from_encoding=htmlcharset)
+        return soup
+
+def getsoup(respHtml):
+        only_title = SoupStrainer("title")
+        soup = BeautifulSoup(respHtml,'lxml',parse_only=only_title)
+        return soup
+
+def gettitle(soup):
+        title = soup.title.string
+        if title==None:
+                title="未获取标题"
+        return title
+
+def retitle(title):
+        strinfo = re.compile('[\r\n\t]')
+        title = strinfo.sub('',title)
+        return titlee

@@ -20,3 +20,10 @@ class type_db(models.Model):
 	type_name = models.CharField(max_length=10)
 	user = models.CharField(max_length=10)
  
+class user_db(models.Model):
+	username = models.CharField(max_length=10)
+	ifuse = models.IntegerField()
+	model_1 = models.CharField(max_length=3)
+	model_2 = models.CharField(max_length=3)
+	expdate = models.DateTimeField()
+

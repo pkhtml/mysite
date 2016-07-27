@@ -1,0 +1,21 @@
+#!/bin/sh  
+### BEGIN INIT INFO
+# Provides: ngrok
+# Required-Start: $remote_fs $syslog
+# Required-Stop: $remote_fs $syslog
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: Start ngrok at boot time
+# Description: Enable service provided by ngrok.
+### END INIT INFO
+  
+ngrok_path=/home/pi/ngrok  
+case "$1" in  
+    start)  
+        echo "start ngrok service.."  
+        sh ${ngrok_path}/ngrok.sh  
+        ;;  
+    *)  
+    exit 1  
+    ;;  
+esac 

@@ -44,33 +44,8 @@ def gettitle(url):
 
 def urladd(request):
 	url = request.POST.get('f_url')
-###	user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windos NT)'
-	#urllib.request.urlencode(user_agent)
-###	headers = {'User-Agent': user_agent}    
-	#req = urllib.request.Request(url, headers=headers)
-	#response = urllib.request.urlopen(req)
-	#print(response)
-	#data = response.read()
-	#
-    #url=request.POST[f_url]
- 	#url = request.POST.get('f_url')
 	urltype = request.POST.get('type')
-###	req = urllib2.Request(url,headers=headers)
-### 	resp = urllib2.urlopen(req)
-### 	respHtml = resp.read()
-# 	respHtml = respHtml.encode('gbk')
-	#foundLabel = respHtml.findAll("label")
-###	only_title = SoupStrainer("title")
-###	soup = BeautifulSoup(respHtml,"lxml",parse_only=only_title)
-###	title = soup.title.string 
 	title = gettitle(url)
-##	title.replace("\r\n","")
-###	strinfo = re.compile('\r\n')
-###	title = strinfo.sub(' ',title)
-#	strinfo = re.compile('\s+')
-#	title = re.sub(strinfo,'',title)
-
-
 	now = time.strftime("%Y%m%d %H:%M:%S",time.localtime())
 	add = url_db(url=url,title=title,add_time=now,urltype=urltype,user="pkhtml",view_count=0)
 	add.save()
@@ -102,17 +77,26 @@ def weixin(request):
                 MsgType = xml.find('MsgType').text
                 Content = xml.find('Content').text
                 MsgId = xml.find('MsgId').text
-                title = gettitle(Content)
-                reply_xml = """<xml>
-                <ToUserName><![CDATA[%s]]></ToUserName>
-                <FromUserName><![CDATA[%s]]></FromUserName>
-                <CreateTime>%s</CreateTime>
-                <MsgType><![CDATA[text]]></MsgType>
-                <Content><![CDATA[%s]]></Content>
-                </xml>"""%(FromUserName,ToUserName,CreateTime,title + "  Hello world, this is test message")
-                now = time.strftime("%Y%m%d %H:%M:%S",time.localtime())
-                add = url_db(url=Content,title=title,add_time=now,urltype=1,user=FromUserName,view_count=0)
-                add.save()
+                if Content[0:4]=='http':
+                    title = gettitle(Content)
+                    reply_xml = """<xml>
+                    <ToUserName><![CDATA[%s]]></ToUserName>
+                    <FromUserName><![CDATA[%s]]></FromUserName>
+                    <CreateTime>%s</CreateTime>
+                    <MsgType><![CDATA[text]]></MsgType>
+                    <Content><![CDATA[%s]]></Content>
+                    </xml>"""%(FromUserName,ToUserName,CreateTime,title)
+                    now = time.strftime("%Y%m%d %H:%M:%S",time.localtime())
+                    add = url_db(url=Content,title=title,add_time=now,urltype=1,user=FromUserName,view_count=0)
+                    add.save()
+                else:
+                    reply_xml = """<xml>
+                    <ToUserName><![CDATA[%s]]></ToUserName>
+                    <FromUserName><![CDATA[%s]]></FromUserName>
+                    <CreateTime>%s</CreateTime>
+                    <MsgType><![CDATA[text]]></MsgType>
+                    <Content><![CDATA[%s]]></Content>
+                    </xml>"""%(FromUserName,ToUserName,CreateTime,Content)               
                 return HttpResponse(reply_xml)
 
 
