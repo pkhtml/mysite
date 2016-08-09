@@ -42,15 +42,12 @@ def gettitle(url):
         return title
 
 def updatetitle(request):
-        old_title = u'weixin'
-        i = 0
-        urlweixin = url_db.objects.filter(title = old_title)
-        for eachurl in urlweixin:
-          eachurl.title=gettitle(eachurl.url)
-          eachurl.save()
-          i = i + 1
+        title = request.POST.get('title')
+        urlweixin = url_db.objects.get(title = 'weixin')
+        urldel.urltype=99
+        urldel.save()
         t = get_template('show.html')
-        html=t.render(Context({'title':'更新成功%d个链接' % i,'url':'../../url/'}))
+        html=t.render(Context({'title':'删除成功','url':'../../url/'}))
         return HttpResponse(html)
 
 def urladd(request):

@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from mysite.view import hello
-from polls.views import shoucang,urladd,urldel,weixin
+from polls.views import shoucang,urladd,urldel,weixin,updatetitle
 
 
 
@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^url/$',shoucang),
     url(r'^url/add/',urladd),
     url(r'^url/del/',urldel),
+    url(r'^url/upt/',updatetitle),
     url(r'^weixin/',weixin),
     # url(r'^static/(?P<path>.*)$','django.views.static.serve',{'document_root':settings.STATIC_ROOT}) 
 ]
